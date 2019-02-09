@@ -2,9 +2,6 @@
   "name": "spotifyapi",
   "version": "1.0.0",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -18,5 +15,9 @@
     "node-pre-gyp": "^0.12.0",
     "pg": "^7.4.3",
     "sequelize": "^4.38.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
   }
 }

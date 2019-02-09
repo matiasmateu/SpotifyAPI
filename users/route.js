@@ -4,11 +4,11 @@ const bcrypt = require('bcryptjs');
 
 const router = new Router()
 
-router.get('/users', (req, res, next) => {
+router.get('/listusers', (req, res, next) => {
     User
       .findAll()
       .then(users => {
-        res.send({ users })
+        res.send("TEST")
       })
       .catch(error => next(error))
   })
