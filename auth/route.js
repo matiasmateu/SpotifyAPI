@@ -1,11 +1,10 @@
 const { Router } = require('express')
 const { toJWT, toData } = require('./jwt.js')
-const auth = require('./middleware')
 const bcrypt = require('bcryptjs');
 const router = new Router()
 const User = require('../users/model')
 
-router.post('/logins', (req, res, next) => {
+router.post('/tokens', (req, res) => {
     if (!req.body.email || !req.body.password) {
         res.status(400).send({
             message: 'Please supply a valid email and password'
@@ -18,18 +17,19 @@ router.post('/logins', (req, res, next) => {
                 function (user) {
                     if (user.password===req.body.password){
                         res.status(200).send(
-                            //jwt: toJWT({ userId: 1 })
-                            "LOGGED IN"
+                            { token: toJWT(user.id) }
                         )
                     }else{
                         res.status(400).send(
                             "OPPS...there is a problem with your credentials"
                         )
                     }
-                },
-                function (errors) {
-                    callback(errors);
                 }
+            )
+            .catch(
+                response => res.status(400).send(
+                    "OPPS...there is a problem with your credentials"
+                )
             )
     }
 })

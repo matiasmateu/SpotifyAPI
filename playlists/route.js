@@ -2,16 +2,22 @@ const { Router } = require('express')
 const Playlist = require('./model')
 const bcrypt = require('bcryptjs');
 const User = require ('../users/model')
+const {toData} = require ('../auth/jwt')
 
 const router = new Router()
 
+// ADD THE TOKEN AUTORIZATION TO RETRIEVE THE PLAYLISTS
 router.get('/playlists', (req, res, next) => {
+    res.send(req.body.Authorization)
+
+    /*
     Playlist
       .findAll()
       .then(playlists => {
         res.send({ playlists })
       })
       .catch(error => next(error))
+      */
   })
 
   router.get('/playlists/:id', (req, res, next) => {
