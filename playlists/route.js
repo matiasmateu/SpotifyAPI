@@ -8,16 +8,25 @@ const router = new Router()
 
 // ADD THE TOKEN AUTORIZATION TO RETRIEVE THE PLAYLISTS
 router.get('/playlists', (req, res, next) => {
-    res.send(req.body.Authorization)
-
-    /*
+  const auth = req.headers.authorization && req.headers.authorization.split(' ')
+  if (auth && auth[0] === 'Bearer' && auth[1]) {
+    const data = toData(auth[1])
     Playlist
-      .findAll()
+      .findAll({where:{user_id:data}})
       .then(playlists => {
         res.send({ playlists })
       })
       .catch(error => next(error))
-      */
+  }
+  else {
+    res.status(401).send({
+      message: 'Please supply some valid credentials'
+    })
+  }
+
+    
+    
+      
   })
 
   router.get('/playlists/:id', (req, res, next) => {
