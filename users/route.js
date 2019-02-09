@@ -4,7 +4,7 @@ const bcrypt = require('bcryptjs');
 
 const router = new Router()
 
-router.get('/users', (req, res, next) => {
+router.get('/Listusers', (req, res, next) => {
     User
       .findAll()
       .then(users => {
