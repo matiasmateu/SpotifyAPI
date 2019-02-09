@@ -12,9 +12,25 @@ router.post('/logins', (req, res, next) => {
         })
     } else {
         // VERIFY IF THE USER EXIST AND IF THE PASSWORD IS CORRECT
-        res.send({
-            jwt: toJWT({ userId: 1 })
-        })
+        User
+            .find({ where: { email: req.body.email } })
+            .then(
+                function (user) {
+                    if (user.password===req.body.password){
+                        res.status(200).send(
+                            //jwt: toJWT({ userId: 1 })
+                            "LOGGED IN"
+                        )
+                    }else{
+                        res.status(400).send(
+                            "OPPS...there is a problem with your credentials"
+                        )
+                    }
+                },
+                function (errors) {
+                    callback(errors);
+                }
+            )
     }
 })
 
@@ -24,30 +40,27 @@ router.post('/users', (req, res, next) => {
             message: 'Please supply a valid email and password'
         })
     } else {
-        if (req.body.password!==req.body.password_confirmation){
+        if (req.body.password !== req.body.password_confirmation) {
             res.status(400).send({
                 message: 'Both passwords must be exactly the same'
             })
-        }else{
+        } else {
             // VERIFY IF THE USER EXISTS
             User
-            .findOrCreate({where: {email: req.body.email}, defaults: {password:req.body.password}})
-            .spread(function(user, created) {
-              res.status(201).send({
-                message: 'User Created'
-            })
-          
-              /*
-                {
-                  username: 'sdepold',
-                  job: 'Technical Lead JavaScript',
-                  id: 1,
-                  createdAt: Fri Mar 22 2013 21: 28: 34 GMT + 0100(CET),
-                  updatedAt: Fri Mar 22 2013 21: 28: 34 GMT + 0100(CET)
-                }
-                created: true
-              */
-            })
+                .findOrCreate({ where: { email: req.body.email }, defaults: { password: req.body.password } })
+                .spread(function (user, created) {
+                    if (created) {
+                        res.status(201).send({
+                            message: 'User Created'
+                        })
+                    } else {
+                        res.status(400).send({
+                            message: 'The user already exists. Please log in'
+                        })
+                    }
+
+
+                })
         }
     }
 })
